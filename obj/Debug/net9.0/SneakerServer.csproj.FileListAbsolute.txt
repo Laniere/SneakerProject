@@ -178,3 +178,4 @@ C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\refint\SneakerServer.dll
 C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\SneakerServer.pdb
 C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\SneakerServer.genruntimeconfig.cache
 C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\ref\SneakerServer.dll
+C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\SneakerServer.sourcelink.json
