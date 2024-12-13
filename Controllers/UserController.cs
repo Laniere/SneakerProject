@@ -18,4 +18,5 @@ public class UserController : ControllerBase //controller add ViewBag and ViewRe
   [HttpGet(Name = "User")]
   public User Get() => _context.Users.FirstOrDefault() ?? throw new Exception("User not found!");
 
+  
 }

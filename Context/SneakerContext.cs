@@ -8,21 +8,42 @@ public class SneakerContext(DbContextOptions<SneakerContext> options) : DbContex
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     optionsBuilder.UseSqlServer(
-        _connectionString);
+        _connectionString).UseSeeding((context, _) =>
+        {
+          Brand? nike = context.Set<Brand>().FirstOrDefault(b => b.Name == "Nike");
+          if (nike == null)
+          {
+            context.Set<Brand>().Add(new Brand { Name = "Nike" });
+            context.SaveChanges();
+          }
+        });
   }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Sneaker>()
-      .HasKey(e => e.SneakerId)
+    modelBuilder.Entity<Sneaker>(e =>
+    {
+      e.Property(e => e.SneakerId).ValueGeneratedOnAdd();
+      e.HasKey(e => e.SneakerId)
       .HasName("PrimaryKey_SneakerId");
+    });
 
-    modelBuilder.Entity<Brand>()
-      .HasMany(e => e.Sneakers)
+    modelBuilder.Entity<Brand>(e =>
+    {
+      e.Property(e => e.BrandId).ValueGeneratedOnAdd();
+      e.HasMany(e => e.Sneakers)
       .WithOne(e => e.Brand)
       .HasForeignKey(e => e.SneakerId)
-      .OnDelete(DeleteBehavior.Cascade)
-      .IsRequired();
+      .OnDelete(DeleteBehavior.Cascade);
+
+      e.HasData(
+        new Brand { BrandId = 1, Name = "Adidas" },
+        new Brand { BrandId = 2, Name = "New Balance" },
+        new Brand { BrandId = 3, Name = "Saucony" },
+        new Brand { BrandId = 4, Name = "Asics" },
+        new Brand { BrandId = 5, Name = "Timberland" }
+      );
+    });
 
     modelBuilder.Entity<Brand>()
      .Navigation(e => e.Sneakers)
