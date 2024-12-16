@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
 namespace SneakerServer.Models
 {
   [Index(nameof(UserName))]
   public class User
   {
+    [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
     public int UserId { get; set; }
     public required string UserName { get; set; }
     public required string Password { get; set; }

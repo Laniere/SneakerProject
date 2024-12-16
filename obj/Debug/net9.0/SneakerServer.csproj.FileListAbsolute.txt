@@ -179,3 +179,6 @@ C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\SneakerServer.pdb
 C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\SneakerServer.genruntimeconfig.cache
 C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\ref\SneakerServer.dll
 C:\repos\SneakerProj\SneakerServer\obj\Debug\net9.0\SneakerServer.sourcelink.json
+c:\repos\SneakerProj\SneakerServer\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+c:\repos\SneakerProj\SneakerServer\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+c:\repos\SneakerProj\SneakerServer\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll

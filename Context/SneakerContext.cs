@@ -16,6 +16,12 @@ public class SneakerContext(DbContextOptions<SneakerContext> options) : DbContex
             context.Set<Brand>().Add(new Brand { Name = "Nike" });
             context.SaveChanges();
           }
+          User? admin = context.Set<User>().FirstOrDefault(u => u.UserName == "Admin");
+          if (admin == null)
+          {
+            context.Set<User>().Add(new User { UserName = "Admin", Password = "test", Name = "Alessio", LastName = "Orvieto", Birthday = new DateTime(1989, 10, 13) });
+            context.SaveChanges();
+          }
         });
   }
 
@@ -63,3 +69,9 @@ public class SneakerContext(DbContextOptions<SneakerContext> options) : DbContex
 //     .Options;
 
 // using var context = new ApplicationDbContext(contextOptions);
+
+// var contextOptions = new DbContextOptionsBuilder<SneakerContext>()
+//   .UseSqlServer(@"Data Source=DESKTOP-7P5OR8C;Initial Catalog=sneakers;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False")
+//   .Options;
+
+// using var context = new SneakerContext(contextOptions);
