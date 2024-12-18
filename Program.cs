@@ -1,5 +1,7 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
-string _connectionString = @"Data Source=DESKTOP-7P5OR8C;Initial Catalog=sneakers;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
+// string _connectionString = @"Data Source=DESKTOP-7P5OR8C;Initial Catalog=sneakers;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
 // Add services to the container.
 
@@ -15,9 +17,8 @@ builder.Services.AddSwaggerGen();
 //                      .AllowAnyMethod()
 //                      .AllowAnyHeader());
 //             });
-
 var connectionString =
-    builder.Configuration.GetConnectionString(_connectionString);
+    builder.Configuration.GetConnectionString("SneakerDatabase");
 
 builder.Services.AddDbContext<SneakerContext>(options =>
     options.UseSqlServer(connectionString));

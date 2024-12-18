@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SneakerServer.Context;
 
@@ -11,9 +12,11 @@ using SneakerServer.Context;
 namespace SneakerServer.Migrations
 {
     [DbContext(typeof(SneakerContext))]
-    partial class SneakerContextModelSnapshot : ModelSnapshot
+    [Migration("20241218091625_AddedStreetAddressModel")]
+    partial class AddedStreetAddressModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,17 +125,6 @@ namespace SneakerServer.Migrations
                     b.HasIndex("UserName");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Birthday = new DateTime(1989, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Orvieto",
-                            Name = "Alessio",
-                            Password = "test",
-                            UserName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("SneakerServer.Models.Sneaker", b =>
@@ -171,15 +163,6 @@ namespace SneakerServer.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    UserId = 1,
-                                    Address = "Via San Giorgio 31",
-                                    City = "Prato",
-                                    State = "Italy"
-                                });
                         });
 
                     b.Navigation("StreetAddress")

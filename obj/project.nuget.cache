@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Kls+/xAzKHk=",
+  "dgSpecHash": "yrX6nUCO0xQ=",
   "success": true,
-  "projectFilePath": "c:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj",
+  "projectFilePath": "C:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Alessio Cristina\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Alessio Cristina\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
