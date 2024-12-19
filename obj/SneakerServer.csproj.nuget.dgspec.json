@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj": {}
+    "C:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj": {}
   },
   "projects": {
-    "c:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj": {
+    "C:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj",
+        "projectUniqueName": "C:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj",
         "projectName": "SneakerServer",
-        "projectPath": "c:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj",
+        "projectPath": "C:\\repos\\SneakerProj\\SneakerServer\\SneakerServer.csproj",
         "packagesPath": "C:\\Users\\Alessio Cristina\\.nuget\\packages\\",
-        "outputPath": "c:\\repos\\SneakerProj\\SneakerServer\\obj\\",
+        "outputPath": "C:\\repos\\SneakerProj\\SneakerServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -69,6 +69,10 @@
               "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[9.0.0, )"
             },

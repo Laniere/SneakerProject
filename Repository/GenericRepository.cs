@@ -65,6 +65,8 @@ namespace SneakerServer.Repository
       }
       dbSet.Remove(entity);
     }
+
+    public void Save() => context.SaveChanges();
   }
 }
 // RAW SQL
