@@ -5,7 +5,6 @@ namespace SneakerServer.Context
     public DbSet<Sneaker> Sneakers { get; set; } = null!;
     public DbSet<Brand> Brands { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
-    private readonly string _connectionString = @"Data Source=DESKTOP-7P5OR8C;Initial Catalog=sneakers;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -28,6 +27,8 @@ namespace SneakerServer.Context
         e.Property(e => e.SneakerId).ValueGeneratedOnAdd();
         e.HasKey(e => e.SneakerId)
         .HasName("PrimaryKey_SneakerId");
+        e.Navigation(e => e.Brand)
+        .UsePropertyAccessMode(PropertyAccessMode.Property);
       });
 
       modelBuilder.Entity<Brand>(e =>
@@ -44,23 +45,14 @@ namespace SneakerServer.Context
           new Brand { BrandId = 4, Name = "Asics" },
           new Brand { BrandId = 5, Name = "Timberland" }
         );
+        e.Navigation(e => e.Sneakers)
+          .UsePropertyAccessMode(PropertyAccessMode.Property);
       });
-
-      modelBuilder.Entity<Brand>()
-       .Navigation(e => e.Sneakers)
-       .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-      modelBuilder.Entity<Sneaker>()
-        .Navigation(e => e.Brand)
-        .UsePropertyAccessMode(PropertyAccessMode.Property);
 
       modelBuilder.Entity<User>(e =>
       {
         e.HasKey(e => e.UserId);
-
-        e.HasData(
-          new User(1, "Admin", "test", "Alessio", "Orvieto", new DateTime(1989, 10, 13), null)
-        );
+        e.HasData(new User(1, "Admin", "test", "Alessio", "Orvieto", new DateTime(1989, 10, 13), null));
         e.OwnsOne(
           e => e.StreetAddress,
           sa =>
@@ -69,8 +61,7 @@ namespace SneakerServer.Context
             sa.Property(p => p.State).IsRequired();
             sa.Property(p => p.City).IsRequired();
           });
-        e.Navigation(e => e.StreetAddress)
-        .IsRequired(); ;
+        e.Navigation(e => e.StreetAddress).IsRequired();
         e.OwnsOne(e => e.StreetAddress).HasData(new
         {
           UserId = 1,
@@ -79,6 +70,20 @@ namespace SneakerServer.Context
           State = "Italy",
         });
       });
+
+      #region Currency Bulk configuration
+      foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+      {
+        foreach (var propertyInfo in entityType.ClrType.GetProperties())
+        {
+          if (propertyInfo.PropertyType == typeof(Currency))
+          {
+            entityType.AddProperty(propertyInfo)
+                .SetValueConverter(typeof(CurrencyConverter));
+          }
+        }
+      }
+      #endregion
     }
   }
 }

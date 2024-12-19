@@ -29,4 +29,32 @@ public class UserController(ILogger<UserController> logger, SneakerContext conte
     return Ok(users);
   }
 
+  [HttpPost()]
+  [ProducesResponseType(200)]
+  public IActionResult Insert(User user)
+  {
+    _uok.UserRepository.Insert(user);
+    _uok.Save();
+    return Ok(user);
+  }
+
+  [HttpPatch()]
+  [ProducesResponseType(200)]
+  [ProducesResponseType(400)]
+  public IActionResult Update(User user)
+  {
+    _uok.UserRepository.Update(user);
+    _uok.Save();
+    return Ok(user);
+  }
+
+  [HttpDelete()]
+  [ProducesResponseType(200)]
+  [ProducesResponseType(400)]
+  public IActionResult Delete(int id)
+  {
+    _uok.UserRepository.Delete(id);
+    _uok.Save();
+    return Ok();
+  }
 }

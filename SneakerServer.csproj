@@ -20,6 +20,8 @@
     <Using Include="Microsoft.EntityFrameworkCore;" />
     <Using Include="SneakerServer.Models;" />
     <Using Include="SneakerServer.Context;" />
+    <Using Include="System.Linq.Expressions;" />
+
   </ItemGroup>
 
 </Project>
