@@ -1,3 +1,5 @@
+using SneakerServer.Context.EntityConfiguration;
+
 namespace SneakerServer.Context
 {
   public class SneakerContext(DbContextOptions<SneakerContext> options) : DbContext(options)
@@ -29,47 +31,11 @@ namespace SneakerServer.Context
         .HasName("PrimaryKey_SneakerId");
         e.Navigation(e => e.Brand)
         .UsePropertyAccessMode(PropertyAccessMode.Property);
+        e.Property(e => e.RetailPrice).HasPrecision(18,2);
       });
 
-      modelBuilder.Entity<Brand>(e =>
-      {
-        e.Property(e => e.BrandId).ValueGeneratedOnAdd();
-        e.HasMany(e => e.Sneakers)
-        .WithOne(e => e.Brand)
-        .HasForeignKey(e => e.SneakerId)
-        .OnDelete(DeleteBehavior.Cascade);
-        e.HasData(
-          new Brand { BrandId = 1, Name = "Adidas" },
-          new Brand { BrandId = 2, Name = "New Balance" },
-          new Brand { BrandId = 3, Name = "Saucony" },
-          new Brand { BrandId = 4, Name = "Asics" },
-          new Brand { BrandId = 5, Name = "Timberland" }
-        );
-        e.Navigation(e => e.Sneakers)
-          .UsePropertyAccessMode(PropertyAccessMode.Property);
-      });
-
-      modelBuilder.Entity<User>(e =>
-      {
-        e.HasKey(e => e.UserId);
-        e.HasData(new User(1, "Admin", "test", "Alessio", "Orvieto", new DateTime(1989, 10, 13), null));
-        e.OwnsOne(
-          e => e.StreetAddress,
-          sa =>
-          {
-            sa.Property(p => p.Address).IsRequired();
-            sa.Property(p => p.State).IsRequired();
-            sa.Property(p => p.City).IsRequired();
-          });
-        e.Navigation(e => e.StreetAddress).IsRequired();
-        e.OwnsOne(e => e.StreetAddress).HasData(new
-        {
-          UserId = 1,
-          Address = "Via San Giorgio 31",
-          City = "Prato",
-          State = "Italy",
-        });
-      });
+      modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
+      modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
       #region Currency Bulk configuration
       foreach (var entityType in modelBuilder.Model.GetEntityTypes())

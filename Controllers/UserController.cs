@@ -1,11 +1,8 @@
-using System.Collections.ObjectModel;
-using Microsoft.AspNetCore.Mvc;
-using SneakerServer.Repository;
-
 namespace SneakerServer.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class UserController(ILogger<UserController> logger, SneakerContext context) : ControllerBase //controller add ViewBag and ViewResult. not necessary for pure asp.net core WebAPI
 {
   private readonly ILogger<UserController> _logger = logger;

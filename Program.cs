@@ -1,12 +1,11 @@
 
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-// string _connectionString = @"Data Source=DESKTOP-7P5OR8C;Initial Catalog=sneakers;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,6 +21,16 @@ var connectionString =
 
 builder.Services.AddDbContext<SneakerContext>(options =>
     options.UseSqlServer(connectionString));
+
+//Setup AUTH
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+//AuthINMEM
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options => options.UseInMemoryDatabase("AppDb"));
+
 var app = builder.Build();
 // app.UseSession();
 
@@ -41,4 +50,23 @@ app.UseSwaggerUI(c =>
     {
       c.SwaggerEndpoint("v1/swagger.json", "MyAPI V1");
     });
+
+//AUTH Map Identity Api map these routes
+// POST /register
+// POST /login
+// POST /refresh
+// GET /confirmEmail
+// POST /resendConfirmationEmail
+// POST /forgotPassword
+// POST /resetPassword
+// POST /manage/2fa
+// GET /manage/info
+// POST /manage/info 
+app.MapIdentityApi<IdentityUser>();
 app.Run();
+var container = new Container(x => x.Scan(scan =>
+{
+  scan.TheCallingAssembly();
+  scan.WithDefaultConventions();
+  // scan.AddAllTypesOf<IDiscountCalculator>();
+}));
