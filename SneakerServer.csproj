@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <!-- <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" /> -->
@@ -33,7 +35,7 @@
     <Using Include="StructureMap" />
     <Using Include="Microsoft.AspNetCore.Authorization" />
     <Using Include="Microsoft.AspNetCore.Mvc" />
-    <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders"/>
+    <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,10 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMvc()
+  .AddJsonOptions(
+    options => options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+    );
 // builder.Services.AddCors(options =>
 //             {
 //               options.AddDefaultPolicy(builder =>
@@ -64,9 +68,3 @@ app.UseSwaggerUI(c =>
 // POST /manage/info 
 app.MapIdentityApi<IdentityUser>();
 app.Run();
-var container = new Container(x => x.Scan(scan =>
-{
-  scan.TheCallingAssembly();
-  scan.WithDefaultConventions();
-  // scan.AddAllTypesOf<IDiscountCalculator>();
-}));

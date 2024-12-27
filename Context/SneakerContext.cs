@@ -19,6 +19,23 @@ namespace SneakerServer.Context
               context.Set<Brand>().Add(new Brand { Name = "Nike" });
               context.SaveChanges();
             }
+            Sneaker? travisJordan1 = context.Set<Sneaker>().FirstOrDefault(b => b.Model == "Travis Jordan 1 High Mocha");
+            Brand savedNikeBrand = context.Set<Brand>().First(b => b.Name == "Nike");
+            if (travisJordan1 == null)
+            {
+              context.Set<Sneaker>().Add(new Sneaker
+              {
+                Model = "Travis Jordan 1 High Mocha",
+                Brand = savedNikeBrand,
+                BrandId = savedNikeBrand.BrandId,
+                Collaboration = "Travis",
+                RetailPrice = 145,
+                ReleaseYear = new DateTime(2020, 10, 12),
+                ColorWay = "Mocha",
+                ProductDescription = "New Travis High"
+              });
+              context.SaveChanges();
+            }
           });
     }
 
@@ -29,9 +46,8 @@ namespace SneakerServer.Context
         e.Property(e => e.SneakerId).ValueGeneratedOnAdd();
         e.HasKey(e => e.SneakerId)
         .HasName("PrimaryKey_SneakerId");
-        e.Navigation(e => e.Brand)
-        .UsePropertyAccessMode(PropertyAccessMode.Property);
-        e.Property(e => e.RetailPrice).HasPrecision(18,2);
+        e.Navigation(e => e.Brand).AutoInclude();
+        e.Property(e => e.RetailPrice).HasPrecision(18, 2);
       });
 
       modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
