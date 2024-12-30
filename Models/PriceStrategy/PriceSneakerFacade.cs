@@ -37,7 +37,7 @@ public class PriceSneakerFacade
                                  }));
   public decimal GetPrice(Sneaker sneaker)
   {
-    var strategy = _container.GetInstance<IPriceStrategy>();
+    IPriceStrategy strategy = _container.GetInstance<IPriceStrategy>();
     return strategy.GetPrice(sneaker.Collaboration, sneaker.RetailPrice);
   }
 }

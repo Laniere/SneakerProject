@@ -1,11 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace SneakerServer.Context.EntityConfiguration;
 
 public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 {
   public void Configure(EntityTypeBuilder<User> builder)
   {
-    builder.HasKey(e => e.UserId);
-    builder.HasData(new User(1, "Admin", "test", "Alessio", "Orvieto", new DateTime(1989, 10, 13), null));
+    // Maps to the AspNetUsers table
+    builder.ToTable("AspNetUsers");
+    // A concurrency token for use with the optimistic concurrency checking
+    builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
+    // builder.HasData(new User("Alessio", "Orvieto", new DateTime(1989, 10, 13), null));
     builder.OwnsOne(
       e => e.StreetAddress,
       sa =>
@@ -15,12 +20,5 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         sa.Property(p => p.City).IsRequired();
       });
     builder.Navigation(e => e.StreetAddress).IsRequired();
-    builder.OwnsOne(e => e.StreetAddress).HasData(new
-    {
-      UserId = 1,
-      Address = "Via San Giorgio 31",
-      City = "Prato",
-      State = "Italy",
-    });
   }
 }

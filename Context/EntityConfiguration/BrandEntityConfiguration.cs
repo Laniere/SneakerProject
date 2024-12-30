@@ -1,3 +1,4 @@
+
 namespace SneakerServer.Context.EntityConfiguration;
 
 public class BrandEntityConfiguration : IEntityTypeConfiguration<Brand>
@@ -11,15 +12,29 @@ public class BrandEntityConfiguration : IEntityTypeConfiguration<Brand>
     .HasForeignKey(e => e.SneakerId)
     .OnDelete(DeleteBehavior.Cascade);
 
-    builder.HasData(
-      new Brand { BrandId = 1, Name = "Adidas" },
-      new Brand { BrandId = 2, Name = "New Balance" },
-      new Brand { BrandId = 3, Name = "Saucony" },
-      new Brand { BrandId = 4, Name = "Asics" },
-      new Brand { BrandId = 5, Name = "Timberland" }
-    );
+    HashSet<Brand> brandsToSeed = SetSeedingBrandFromTxt();
+    builder.HasData(brandsToSeed);
 
     builder.Navigation(e => e.Sneakers)
       .UsePropertyAccessMode(PropertyAccessMode.Property);
+  }
+
+  private static HashSet<Brand> SetSeedingBrandFromTxt()
+  {
+    HashSet<Brand> brands = [];
+    String localPath = @"Files\Brand.txt";
+    if (!File.Exists(localPath))
+    {
+      //Todo ADD LOG
+      return brands;
+    }
+    String[] lines = File.ReadAllLines(localPath);
+    int brandId = 0;
+    foreach (String item in lines)
+    {
+      brandId++;
+      brands.Add(new Brand { BrandId = brandId, Name = item });
+    }
+    return brands;
   }
 }

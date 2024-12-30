@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +29,14 @@ builder.Services.AddDbContext<SneakerContext>(options =>
 
 //Setup AUTH
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentityCore<User>()
+        .AddEntityFrameworkStores<SneakerContext>();
+builder.Services.AddIdentityApiEndpoints<IdentityUser<Guid>>()
+    .AddEntityFrameworkStores<SneakerContext>();
 
 //AuthINMEM
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseInMemoryDatabase("AppDb"));
+// builder.Services.AddDbContext<IdentityDbContext>(
+//     options => options.UseInMemoryDatabase("AppDb"));
 
 var app = builder.Build();
 // app.UseSession();

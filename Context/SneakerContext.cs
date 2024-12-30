@@ -1,26 +1,22 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SneakerServer.Context.EntityConfiguration;
 
 namespace SneakerServer.Context
 {
-  public class SneakerContext(DbContextOptions<SneakerContext> options) : DbContext(options)
+  public class SneakerContext(DbContextOptions<SneakerContext> options) : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(options)
   {
     public DbSet<Sneaker> Sneakers { get; set; } = null!;
     public DbSet<Brand> Brands { get; set; } = null!;
-    public DbSet<User> Users { get; set; } = null!;
+    // public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 
       optionsBuilder.UseSqlServer().UseSeeding((context, _) =>
           {
-            Brand? nike = context.Set<Brand>().FirstOrDefault(b => b.Name == "Nike");
-            if (nike == null)
-            {
-              context.Set<Brand>().Add(new Brand { Name = "Nike" });
-              context.SaveChanges();
-            }
             Sneaker? travisJordan1 = context.Set<Sneaker>().FirstOrDefault(b => b.Model == "Travis Jordan 1 High Mocha");
-            Brand savedNikeBrand = context.Set<Brand>().First(b => b.Name == "Nike");
+            Brand savedNikeBrand = context.Set<Brand>().Where(b => b.Name.Contains("Nike")).First();
             if (travisJordan1 == null)
             {
               context.Set<Sneaker>().Add(new Sneaker
@@ -41,6 +37,10 @@ namespace SneakerServer.Context
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+      modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
+      modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+      base.OnModelCreating(modelBuilder);
       modelBuilder.Entity<Sneaker>(e =>
       {
         e.Property(e => e.SneakerId).ValueGeneratedOnAdd();
@@ -50,8 +50,6 @@ namespace SneakerServer.Context
         e.Property(e => e.RetailPrice).HasPrecision(18, 2);
       });
 
-      modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
-      modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
       #region Currency Bulk configuration
       foreach (var entityType in modelBuilder.Model.GetEntityTypes())
