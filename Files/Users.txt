@@ -1,0 +1,2 @@
+Laniere;Alessio;Orvieto;1989-10-13;alex4zanetti@hotmail.it;true;false;3458048190;true;
+PippoFranco;Pippo;Franco;;pippo@hotmail.it;false;false;3458048190;false;

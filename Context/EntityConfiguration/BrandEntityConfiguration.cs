@@ -6,17 +6,14 @@ public class BrandEntityConfiguration : IEntityTypeConfiguration<Brand>
   public void Configure(EntityTypeBuilder<Brand> builder)
   {
     builder.Property(e => e.BrandId).ValueGeneratedOnAdd();
-
     builder.HasMany(e => e.Sneakers)
     .WithOne(e => e.Brand)
     .HasForeignKey(e => e.SneakerId)
     .OnDelete(DeleteBehavior.Cascade);
-
-    HashSet<Brand> brandsToSeed = SetSeedingBrandFromTxt();
-    builder.HasData(brandsToSeed);
-
     builder.Navigation(e => e.Sneakers)
       .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+    builder.HasData(SetSeedingBrandFromTxt());
   }
 
   private static HashSet<Brand> SetSeedingBrandFromTxt()

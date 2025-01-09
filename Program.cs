@@ -1,6 +1,5 @@
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,30 +24,46 @@ var connectionString =
     builder.Configuration.GetConnectionString("SneakerDatabase");
 
 builder.Services.AddDbContext<SneakerContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString).ConfigureWarnings
+    (warnings =>
+    {
+      // Necessary for seeding identity in EF Core 9
+      warnings.Log(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning);
+    }));
+
 
 //Setup AUTH
 builder.Services.AddAuthorization();
+// builder.Services
+//   .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//     .AddCookie(options =>
+//     {
+//       options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+//     });
+
 builder.Services.AddIdentityCore<User>()
         .AddEntityFrameworkStores<SneakerContext>();
-builder.Services.AddIdentityApiEndpoints<IdentityUser<Guid>>()
+builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<SneakerContext>();
 
-//AuthINMEM
 // builder.Services.AddDbContext<IdentityDbContext>(
 //     options => options.UseInMemoryDatabase("AppDb"));
 
 var app = builder.Build();
-// app.UseSession();
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
   app.MapOpenApi();
 }
 
+//Minimal API TEST
+app.MapGet("/brands", async (SneakerContext db) =>
+    await db.Set<Brand>().ToListAsync());
+
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 app.UseHttpsRedirection();
-app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
 app.UseDeveloperExceptionPage();
@@ -69,5 +84,6 @@ app.UseSwaggerUI(c =>
 // POST /manage/2fa
 // GET /manage/info
 // POST /manage/info 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<User>();
+
 app.Run();

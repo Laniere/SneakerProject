@@ -4,7 +4,7 @@ using SneakerServer.Context.EntityConfiguration;
 
 namespace SneakerServer.Context
 {
-  public class SneakerContext(DbContextOptions<SneakerContext> options) : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(options)
+  public class SneakerContext(DbContextOptions<SneakerContext> options) : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
   {
     public DbSet<Sneaker> Sneakers { get; set; } = null!;
     public DbSet<Brand> Brands { get; set; } = null!;
@@ -12,7 +12,6 @@ namespace SneakerServer.Context
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-
       optionsBuilder.UseSqlServer().UseSeeding((context, _) =>
           {
             Sneaker? travisJordan1 = context.Set<Sneaker>().FirstOrDefault(b => b.Model == "Travis Jordan 1 High Mocha");
@@ -37,10 +36,11 @@ namespace SneakerServer.Context
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      base.OnModelCreating(modelBuilder);
 
       modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
       modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
-      base.OnModelCreating(modelBuilder);
+      // Is possible to set entity here
       modelBuilder.Entity<Sneaker>(e =>
       {
         e.Property(e => e.SneakerId).ValueGeneratedOnAdd();

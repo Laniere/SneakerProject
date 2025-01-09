@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SneakerServer.Context;
 
@@ -11,9 +12,11 @@ using SneakerServer.Context;
 namespace SneakerServer.Migrations
 {
     [DbContext(typeof(SneakerContext))]
-    partial class SneakerContextModelSnapshot : ModelSnapshot
+    [Migration("20241230164140_UpdatedUserModel")]
+    partial class UpdatedUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1210,6 +1213,7 @@ namespace SneakerServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -1219,6 +1223,7 @@ namespace SneakerServer.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -1265,10 +1270,10 @@ namespace SneakerServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2e376b4e-d236-45dc-ad3d-c59595b228e5"),
+                            Id = new Guid("3026a66a-e97b-4bae-9e7d-c71380969970"),
                             AccessFailedCount = 0,
                             Birthday = new DateTime(1989, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "1b06e71a-5120-4dd9-951b-9e115076e6c9",
+                            ConcurrencyStamp = "88f5a1c2-2f23-4918-b539-da592a1f64b8",
                             Email = "alex4zanetti@hotmail.it",
                             EmailConfirmed = true,
                             LastName = "Orvieto",
@@ -1282,9 +1287,9 @@ namespace SneakerServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6630f933-d653-446b-915d-d2ee7c93894a"),
+                            Id = new Guid("f8c339e2-48cd-49b6-8de5-a57822eb268c"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ade2e5c-4a6a-4ce8-84d7-03c6fffd2fc0",
+                            ConcurrencyStamp = "7ba843bb-6bd4-4823-9ecf-617d636cfcc2",
                             Email = "pippo@hotmail.it",
                             EmailConfirmed = false,
                             LastName = "Franco",

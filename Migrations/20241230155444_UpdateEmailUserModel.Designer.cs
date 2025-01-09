@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SneakerServer.Context;
 
@@ -11,9 +12,11 @@ using SneakerServer.Context;
 namespace SneakerServer.Migrations
 {
     [DbContext(typeof(SneakerContext))]
-    partial class SneakerContextModelSnapshot : ModelSnapshot
+    [Migration("20241230155444_UpdateEmailUserModel")]
+    partial class UpdateEmailUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1191,7 +1194,7 @@ namespace SneakerServer.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Birthday")
+                    b.Property<DateTime>("Birthday")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1210,6 +1213,7 @@ namespace SneakerServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -1219,6 +1223,7 @@ namespace SneakerServer.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -1261,41 +1266,6 @@ namespace SneakerServer.Migrations
                     b.HasIndex("UserName");
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("2e376b4e-d236-45dc-ad3d-c59595b228e5"),
-                            AccessFailedCount = 0,
-                            Birthday = new DateTime(1989, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "1b06e71a-5120-4dd9-951b-9e115076e6c9",
-                            Email = "alex4zanetti@hotmail.it",
-                            EmailConfirmed = true,
-                            LastName = "Orvieto",
-                            LockoutEnabled = false,
-                            Name = "Alessio",
-                            NormalizedEmail = "ALEX4ZANETTI@HOTMAIL.IT",
-                            PhoneNumber = "3458048190",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "Laniere"
-                        },
-                        new
-                        {
-                            Id = new Guid("6630f933-d653-446b-915d-d2ee7c93894a"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ade2e5c-4a6a-4ce8-84d7-03c6fffd2fc0",
-                            Email = "pippo@hotmail.it",
-                            EmailConfirmed = false,
-                            LastName = "Franco",
-                            LockoutEnabled = false,
-                            Name = "Pippo",
-                            NormalizedEmail = "PIPPO@HOTMAIL.IT",
-                            PhoneNumber = "3458048190",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "PippoFranco"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1368,12 +1338,15 @@ namespace SneakerServer.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Address")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("City")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserId");
@@ -1384,7 +1357,8 @@ namespace SneakerServer.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("StreetAddress");
+                    b.Navigation("StreetAddress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SneakerServer.Models.Brand", b =>
