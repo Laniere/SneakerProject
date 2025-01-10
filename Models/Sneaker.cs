@@ -14,6 +14,7 @@ public class Sneaker
   public DateTime ReleaseYear { get; set; }
   public string ColorWay { get; set; } = "";
   public string ProductDescription { get; set; } = "";
+
   private readonly decimal _commercialPrice;
   public decimal CommercialPrice
   {
@@ -25,3 +26,12 @@ public class Sneaker
     return facade.GetPrice(this);
   }
 }
+
+#region DTOs
+public class SneakerDashboardDTO
+{
+  public required string Model { get; set; }
+  public required decimal RetailPrice { get; set; }
+  public required string Brand { get; set; }
+}
+#endregion

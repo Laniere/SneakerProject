@@ -1,3 +1,4 @@
+using SneakerServer.Models.Mappers;
 namespace SneakerServer.Controllers;
 
 [ApiController]
@@ -6,13 +7,22 @@ namespace SneakerServer.Controllers;
 public class SneakerController(ILogger<SneakerController> logger, SneakerContext context) : ControllerBase
 {
   private readonly ILogger _logger = logger;
-  private readonly GenericRepository<Sneaker> _repository = new(context);
+  private readonly SneakerContext _context = context;
 
   [HttpGet()]
   [ProducesResponseType(200)]
-  public IActionResult GetAll()
+  public async Task<ActionResult<IEnumerable<Sneaker>>> GetAll()
   {
-    IEnumerable<Sneaker> sneakers = _repository.GetAll();
-    return Ok(sneakers);
+    return await _context.Sneakers.AsNoTracking()
+      .ToListAsync();
+  }
+
+  [HttpGet()]
+  [ProducesResponseType(200)]
+  public async Task<ActionResult<IEnumerable<SneakerDashboardDTO>>> GetAllDashboard()
+  {
+    return await _context.Sneakers.AsNoTracking()
+      .Select(x => x.MapToDTO())
+      .ToListAsync();
   }
 }

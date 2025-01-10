@@ -1,70 +1,66 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using SneakerServer.Context.EntityConfiguration;
 
-namespace SneakerServer.Context
+namespace SneakerServer.Context;
+public class SneakerContext(DbContextOptions<SneakerContext> options) : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
 {
-  public class SneakerContext(DbContextOptions<SneakerContext> options) : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
+  public DbSet<Sneaker> Sneakers { get; set; } = null!;
+  public DbSet<Brand> Brands { get; set; } = null!;
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    public DbSet<Sneaker> Sneakers { get; set; } = null!;
-    public DbSet<Brand> Brands { get; set; } = null!;
-    // public DbSet<User> Users { get; set; } = null!;
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-      optionsBuilder.UseSqlServer().UseSeeding((context, _) =>
-          {
-            Sneaker? travisJordan1 = context.Set<Sneaker>().FirstOrDefault(b => b.Model == "Travis Jordan 1 High Mocha");
-            Brand savedNikeBrand = context.Set<Brand>().Where(b => b.Name.Contains("Nike")).First();
-            if (travisJordan1 == null)
-            {
-              context.Set<Sneaker>().Add(new Sneaker
-              {
-                Model = "Travis Jordan 1 High Mocha",
-                Brand = savedNikeBrand,
-                BrandId = savedNikeBrand.BrandId,
-                Collaboration = "Travis",
-                RetailPrice = 145,
-                ReleaseYear = new DateTime(2020, 10, 12),
-                ColorWay = "Mocha",
-                ProductDescription = "New Travis High"
-              });
-              context.SaveChanges();
-            }
-          });
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-      base.OnModelCreating(modelBuilder);
-
-      modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
-      modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
-      // Is possible to set entity here
-      modelBuilder.Entity<Sneaker>(e =>
-      {
-        e.Property(e => e.SneakerId).ValueGeneratedOnAdd();
-        e.HasKey(e => e.SneakerId)
-        .HasName("PrimaryKey_SneakerId");
-        e.Navigation(e => e.Brand).AutoInclude();
-        e.Property(e => e.RetailPrice).HasPrecision(18, 2);
-      });
-
-
-      #region Currency Bulk configuration
-      foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-      {
-        foreach (var propertyInfo in entityType.ClrType.GetProperties())
+    optionsBuilder.UseSqlServer().UseSeeding((context, _) =>
         {
-          if (propertyInfo.PropertyType == typeof(Currency))
+          Sneaker? travisJordan1 = context.Set<Sneaker>().FirstOrDefault(b => b.Model == "Travis Jordan 1 High Mocha");
+          Brand savedNikeBrand = context.Set<Brand>().Where(b => b.Name.Contains("Nike")).First();
+          if (travisJordan1 == null)
           {
-            entityType.AddProperty(propertyInfo)
-                .SetValueConverter(typeof(CurrencyConverter));
+            context.Set<Sneaker>().Add(new Sneaker
+            {
+              Model = "Travis Jordan 1 High Mocha",
+              Brand = savedNikeBrand,
+              BrandId = savedNikeBrand.BrandId,
+              Collaboration = "Travis",
+              RetailPrice = 145,
+              ReleaseYear = new DateTime(2020, 10, 12),
+              ColorWay = "Mocha",
+              ProductDescription = "New Travis High"
+            });
+            context.SaveChanges();
           }
+        });
+  }
+
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    base.OnModelCreating(modelBuilder);
+
+    modelBuilder.ApplyConfiguration(new BrandEntityConfiguration());
+    modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+    // Is possible to set entity here
+    modelBuilder.Entity<Sneaker>(e =>
+    {
+      e.Property(e => e.SneakerId).ValueGeneratedOnAdd();
+      e.HasKey(e => e.SneakerId)
+      .HasName("PrimaryKey_SneakerId");
+      e.Navigation(e => e.Brand).AutoInclude();
+      e.Property(e => e.RetailPrice).HasPrecision(18, 2);
+    });
+
+
+    #region Currency Bulk configuration
+    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+    {
+      foreach (var propertyInfo in entityType.ClrType.GetProperties())
+      {
+        if (propertyInfo.PropertyType == typeof(Currency))
+        {
+          entityType.AddProperty(propertyInfo)
+              .SetValueConverter(typeof(CurrencyConverter));
         }
       }
-      #endregion
     }
+    #endregion
   }
 }
 // var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
